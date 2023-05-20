@@ -22,8 +22,8 @@ type IAppConfig interface {
 	GetToken() string
 }
 
-func NewConfig() IConfig {
-	envMap, err := godotenv.Read()
+func NewConfig(path string) IConfig {
+	envMap, err := godotenv.Read(path)
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}

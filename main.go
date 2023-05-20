@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	cfg := config.NewConfig()
+	cfg := config.NewConfig("./.env")
 
-	server.NewDiscordServer(cfg).Start() 
+	server.NewDiscordServer(cfg).Start()
 }
