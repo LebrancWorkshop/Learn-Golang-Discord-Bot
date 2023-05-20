@@ -30,6 +30,8 @@ func (b *botinfoModule) Init() {
 			},
 		},
 	})
+
+	b.module.commandHandlers["help"] = b.handler.Help
 }
 
 func (b *botinfoModule) Handler() botinfoHandlers.IBotinfoHandler {

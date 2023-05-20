@@ -38,7 +38,7 @@ func NewDiscordServer(cfg config.IConfig) IDiscordServer {
 	}
 }
 
-// Code From: https://github.com/bwmarrin/discordgo/blob/master/examples/slash_commands/main.go 
+// Code From: https://github.com/bwmarrin/discordgo/blob/master/examples/slash_commands/main.go
 func (s *discordServer) Start() {
 	s.dg.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
 		log.Printf("Logged in as: %v#%v", s.State.User.Username, s.State.User.Discriminator)
@@ -47,6 +47,9 @@ func (s *discordServer) Start() {
 	if err != nil {
 		log.Fatalf("Cannot open the session: %v", err)
 	}
+
+	module := ModuleInit(s)
+	module.BotinfoModule().Init()
 
 	log.Println("Adding commands...")
 	registeredCommands := make([]*discordgo.ApplicationCommand, len(s.commands))
@@ -59,6 +62,12 @@ func (s *discordServer) Start() {
 	}
 
 	defer s.dg.Close()
+
+	s.dg.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if h, ok := module.GetCommandHandlers()[i.ApplicationCommandData().Name]; ok {
+			h(s, i)
+		}
+	})
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)

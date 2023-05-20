@@ -4,6 +4,7 @@ import "github.com/bwmarrin/discordgo"
 
 type IModule interface {
 	GetCommandHandlers() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate)
+	BotinfoModule() IBotinfoModule
 }
 
 type module struct {
